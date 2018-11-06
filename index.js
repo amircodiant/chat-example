@@ -3,6 +3,8 @@ var socketIo = require('socket.io');
 
 var app = express();
 
+console.log('__dirname----->',__dirname)
+
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
@@ -15,11 +17,18 @@ var server =  app.listen(3000, function(){
 var io = socketIo(server);
 
 io.on('connection', function(socket){
-  console.log('a user connected');
+
+
+  console.log('a user connected -----  ',socket.id);
+
+  socket.emit('ferret',{name:'amir',age:27}, (data) => {
+    console.log(data); // data will be 'woot'
+  });
 
   socket.on('chat message', function(msg){
-    console.log('message: ' + msg);
-    io.emit('chat message', msg);
+    console.log(socket.id + ' ----message: ' + msg,);
+    // io.emit('chat message', msg);
+    socket.emit('chat message', msg);
   });
 
 
@@ -28,10 +37,6 @@ io.on('connection', function(socket){
     console.log('user disconnected');
   });
 });
-
-
-
-
 
 
 

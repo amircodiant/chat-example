@@ -37,6 +37,11 @@
         $('#messages').append($('<li>').text(msg));
       });
 
+      socket.on('ferret', (data, fn) => {
+        console.log(data);
+        fn('woot');
+      });
+
     });
   </script>
 
