@@ -5,8 +5,8 @@ var socketIo = require('socket.io');
 
 var models = require('./models');
 var orm = {};
-models(function (err, db) {
-    if (err) return throw(err);
+models(function (err, db) { 
+    if (err) throw (err);
 
     orm.models = db.models;
     orm.db     = db; 
