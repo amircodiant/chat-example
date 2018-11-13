@@ -1,5 +1,17 @@
+'use strict';
+
 var express = require('express');
 var socketIo = require('socket.io');
+
+var models = require('./models');
+var orm = {};
+models(function (err, db) {
+    if (err) return throw(err);
+
+    orm.models = db.models;
+    orm.db     = db; 
+});
+
 
 var app = express();
 
@@ -7,6 +19,7 @@ console.log('__dirname----->',__dirname)
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
+
 });
 
 
@@ -17,6 +30,8 @@ var server =  app.listen(3000, function(){
 var io = socketIo(server);
 
 io.on('connection', function(socket){
+
+  
 
 
   console.log('a user connected -----  ',socket.id);
@@ -37,6 +52,9 @@ io.on('connection', function(socket){
     console.log('user disconnected');
   });
 });
+
+
+
 
 
 
