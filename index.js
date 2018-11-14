@@ -31,9 +31,6 @@ var io = socketIo(server);
 
 io.on('connection', function(socket){
 
-  
-
-
   console.log('a user connected -----  ',socket.id);
 
   socket.emit('ferret',{name:'amir',age:27}, (data) => {
@@ -46,10 +43,33 @@ io.on('connection', function(socket){
     socket.emit('chat message', msg);
   });
 
+  socket.on('new-user', (data,fn)=>{
+    console.log('user---->',data);
+
+    orm.models.user.create({ name: data, surname: "test", age: 27, socket_id:socket.id }, function(err) {
+      if (err){
+        fn(err);
+        throw err;
+      }   
+      fn('user create succesfully');
+    });
 
 
+  });
+
+
+
+
+
+  /**
+   * Disconnect Event
+   */
   socket.on('disconnect', function(){
-    console.log('user disconnected');
+    console.log('user disconnected----->', socket.id);
+    orm.models.user.find({ socket_id:socket.id }).remove(function (err) {
+      if (err) throw (err);
+    });
+    
   });
 });
 
